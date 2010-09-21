@@ -1,0 +1,32 @@
+#!/bin/zsh
+ME=$(basename $0)
+
+doit()	{
+	printf "#%02X%02X%02X\n" "${1}" "${2}" "${3}"
+}
+
+if [ $# -eq 3 ]; then
+	doit "${1}" "${2}" "${3}"
+elif [ $# -gt 0 ]; then
+	echo "${ME}: bugger $#" >&2
+else
+	while :
+	do
+		r=
+		g=
+		b=
+		if ! read "r?${ME}> " g b junk; then
+			break
+		fi
+		case "${r}" in
+		[Qq][Uu][Ii][Tt] | [Ee][Xx][Ii][Tt] )
+			exit 0
+			;;
+		esac
+		if [ -z "$r" -o -z "$g" -o -z "$b" ]; then
+			echo "${ME}: need r g b values" >&2
+		else
+			doit "${r}" "${g}" "${b}"
+		fi
+	done
+fi

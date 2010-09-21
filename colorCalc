@@ -1,0 +1,24 @@
+#!/bin/awk -f
+function ctof( c )	{
+	# return( (c+1.0) / 256.0 )
+	return( c / 255.0 )
+}
+function process( red, green, blue, c )	{
+	printf( "/* red:%s green:%s blue:%s */\n", red, green, blue )
+	printf( "rgb<%g,%g,%g>\n", ctof( red ), ctof( green ), ctof( blue ) )
+	printf( "#%02X%02X%02X\n", red, green, blue )
+}
+BEGIN	{
+}
+/#/	{
+	sub( /#.*$/, "" )
+}
+NF >= 3	{
+	process( $1, $2, $3 )
+	next
+}
+{
+	printf "# Huh? (%s)\n", $0
+}
+END	{
+}
